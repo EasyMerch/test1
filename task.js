@@ -30,16 +30,25 @@ mobile_init = {
  * Parameters:
  *      category_ids typeof Array - Если не заполнено то выводим все
  */
-function render_skus(category_ids){
-
+ function render_skus(category_ids = [168,268]){
+    const skus = mobile_init["skus"].filter(el => el.category_id>=category_ids[0]&&el.category_id<=category_ids[1])
+    return skus
 }
 
 function make_categories_hash(){
-    return {};
+  let categoriesArr = Object.values(mobile_init["categories"]).map(el=>[el.id,el.parent_id,el.name])
+  noParentCategory = categoriesArr.filter(el=>!el[1])
+  haveParentCategory = categoriesArr.filter(el=>el[1]).sort((a,b)=>a[1]-b[1])
+  categoriesArr = [...noParentCategory,...haveParentCategory]
+  
+  return categoriesArr;
 }
 
 function make_shop_skus_array(){
-    return [];
+ const arr = Object.values(Object.values(mobile_init["shop_skus"])[0])
+ const res =[]
+ arr.forEach(el=>{res.push(...el)})
+ return res;
 }
 
 var categories_hash = make_categories_hash();
